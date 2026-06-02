@@ -23,8 +23,26 @@ I check the file type, to find it was a PHP script.
 
 I cat'd the file to find obfuscated PHP. 
 
-Using the stat command I could see that this file was created last year, meaning this vulnerability had been
+Using the stat command I could see that this file was created last year, meaning the malware had established a connection for months now.
 
 I also wanted to check for any malicious cron jobs, but there were none.
 
-A
+
+At this point I needed to make an assessment:
+Is the time I would spend investigating and removing this malware worth the time it would take to restore from backup. Furthermore, if restoring from backup was the better choice, how would I circumvent the fact that the malware had been present since at least 6 months?
+
+The answer to the first question is restoring from backups is a more time and cost effective recovery technique. This will also allow me to keep the active system online and functioning during restore time, as the system can currently maintain its use without having any further negative affects.
+
+The answer to the second question is that I can quickly spin up a system from scratch/template, and restore only module configuration. These modules are separate from the actual operating system, and only hold data pertaining to their specific function.
+
+I can pull a recent backup, exclude any modules affected by the vulnerability and exploit, and rebuild those modules from scratch. 
+That is exactly what I did. I restore the system on a private-side VM - meaning it was not yet exposed to the public internet. In this state, I reconfigure the modules safely and test to confirm the exploit was no longer an option. This also allowed me to configure the system without taking the active system offline.
+
+Once everything was ready and tested I pulled the old system offline and brought the new one onto the public VM interface with the same IP. I could see attempts using the same exploit that were no longer successful as I had remediately the vulnerability. 
+
+Post-incident analysis - 
+After finding and addressing the vulnerability, I deployed an eyes-on check of all similar systems and confirmed that the vulnerability existed nowhere else. I reviewed with the team what had happened they may all be aware of this going forward.
+
+
+
+
